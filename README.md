@@ -117,3 +117,6 @@ docker exec -it champions_league_db psql -U admin -d champions_league -f /docker
 - Se implementaron restricciones de integridad referencial (FK, CHECK)
 - Los datos son coherentes con equipos reales de la Champions League
 - El proyecto cumple con las buenas prácticas de modelado de bases de datos
+- Durante la integración con Docker se detectó que los scripts SQL se ejecutaban en orden alfabético, lo que causaba que las VIEWS se intentaran crear antes de que existieran las tablas base.
+- Para corregirlo, se renombraron los archivos SQL con prefijos numéricos (01_schema.sql, 02_seed.sql, 03_reports_vw.sql, 04_verify.sql) y así asegurar que primero se creen las tablas, luego los datos y al final las vistas.
+- Esta decisión permite que el contenedor se inicialice de forma reproducible con docker compose up --build sin errores por dependencias entre scripts.
